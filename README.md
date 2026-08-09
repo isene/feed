@@ -2,7 +2,7 @@
 
 # feed
 
-![version](https://img.shields.io/badge/version-0.1.0-blue) ![crate](https://img.shields.io/badge/crate-fe2o3--feed-orange) ![license](https://img.shields.io/badge/license-Unlicense-green) ![Stay Amazing](https://img.shields.io/badge/Stay-Amazing-important)
+![version](https://img.shields.io/badge/version-0.1.1-blue) ![crate](https://img.shields.io/badge/crate-fe2o3--feed-orange) ![license](https://img.shields.io/badge/license-Unlicense-green) ![Stay Amazing](https://img.shields.io/badge/Stay-Amazing-important)
 
 RSS and Atom parsing for the [Fe₂O₃](https://github.com/isene/fe2o3) suite.
 

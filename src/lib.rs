@@ -56,6 +56,11 @@ pub fn parse(xml: &str, feed_title: &str, feed_url: &str) -> Vec<Item> {
             )
         };
         let content = content.unwrap_or_default();
+        // An author can arrive as markup: MyBB's dc:creator is a whole
+        // anchor tag round the name. Left alone it reaches a list row as
+        // `<a href=…` and gets shortened to nonsense.
+        let author = author.map(|a| strip_html_simple(&a).trim().to_string())
+            .filter(|a| !a.is_empty());
         Item {
             id: format!("rss_{}", simple_hash(
                 id.as_deref().or(link.as_deref()).unwrap_or(title.as_deref().unwrap_or("")))),
@@ -279,6 +284,21 @@ mod tests {
         assert_ne!(with[0].id, without[0].id);
         let again = parse("<rss><item><guid>g</guid><link>OTHER</link></item></rss>", "f", "u");
         assert_eq!(with[0].id, again[0].id, "a changed link must not orphan the entry");
+    }
+
+    #[test]
+    fn an_author_wrapped_in_markup_comes_back_as_a_name() {
+        // MyBB (the HP Forum) puts a whole anchor in dc:creator.
+        let xml = "<rss><item><title>T</title><dc:creator><![CDATA[\
+            <a href=\"https://x/member.php?uid=1\">Eddie W. Shore</a>]]></dc:creator>\
+            </item></rss>";
+        assert_eq!(parse(xml, "HP Forum", "u")[0].author, "Eddie W. Shore");
+    }
+
+    #[test]
+    fn an_author_of_only_markup_falls_back_to_the_feed() {
+        let xml = "<rss><item><title>T</title><dc:creator><![CDATA[<br/>]]></dc:creator></item></rss>";
+        assert_eq!(parse(xml, "HP Forum", "u")[0].author, "HP Forum");
     }
 
     #[test]

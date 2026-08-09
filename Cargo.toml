@@ -1,6 +1,6 @@
 [package]
 name = "fe2o3-feed"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Geir Isene <g@isene.com>"]
 description = "RSS and Atom parsing for the Fe2O3 suite. Pure logic, no I/O."
